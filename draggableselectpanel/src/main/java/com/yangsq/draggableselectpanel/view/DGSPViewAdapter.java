@@ -1,4 +1,4 @@
-package com.yangsq.draggableselectpanel.adapter;
+package com.yangsq.draggableselectpanel.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,6 @@ import android.content.Context;
 
 import com.yangsq.draggableselectpanel.helper.DGSPFavoriteHelper;
 import com.yangsq.draggableselectpanel.helper.DGSPItemHelper;
-import com.yangsq.draggableselectpanel.view.DraggableGroupSelectPanelView;
 import com.yangsq.draggableselectpanel.event.DGSPFavoriteGroupChangeEvent;
 import com.yangsq.draggableselectpanel.model.DGSPFavoriteConfig;
 import com.yangsq.draggableselectpanel.model.IDGSPItem;
@@ -70,7 +69,7 @@ public class DGSPViewAdapter {
      *
      * @param panelView
      */
-    public void setPanelView(DraggableGroupSelectPanelView panelView) {
+    void setPanelView(DraggableGroupSelectPanelView panelView) {
         this.mPanelView = panelView;
         mFavoriteConfig = panelView.getFavoriteConfig();
     }
@@ -78,7 +77,7 @@ public class DGSPViewAdapter {
     /**
      * 初始化ui
      */
-    public void initViews() {
+     void initViews() {
         // 先判断是否使用收藏
         if (mFavoriteConfig.isUseFavorite()) {
             DGSPFavoriteHelper.getFavoriteItemList(mContext, mFavoriteConfig.getUserId(),

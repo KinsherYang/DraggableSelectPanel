@@ -32,6 +32,9 @@ public class DraggableListFragment extends Fragment {
     private List<IDGSPItem> mItemModelList;
     private BGAnimRecyclerView mBGAnimRecyclerView;
     private DraggableListController mDraggableListController;
+    private float mBGHeight;
+    private float mBGWidth;
+    private int mBGResId;
     /**
      * 组的唯一标识
      */
@@ -68,10 +71,14 @@ public class DraggableListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
         mBGAnimRecyclerView = new BGAnimRecyclerView(getActivity());
-        mBGAnimRecyclerView.setBGSize(getResources().getDimensionPixelOffset(R.dimen.dsgp_bg_size),
-            getResources().getDimensionPixelOffset(R.dimen.dsgp_bg_size));
-        mDraggableListController =
-            new DraggableListController(getActivity(), mGroupCode, mItemModelList, mBGAnimRecyclerView, mItemAdapter,mDGSPFavoriteConfig);
+        if (mBGWidth>0&&mBGHeight>0) {
+            mBGAnimRecyclerView.setBGSize(mBGWidth, mBGHeight);
+        }
+        if (mBGResId > 0) {
+            mBGAnimRecyclerView.setBGResId(mBGResId);
+        }
+        mDraggableListController = new DraggableListController(getActivity(), mGroupCode, mItemModelList,
+            mBGAnimRecyclerView, mItemAdapter, mDGSPFavoriteConfig);
         if (mOnItemViewClickListener != null) {
             mDraggableListController.setOnItemClickListener(mOnItemViewClickListener);
         }
@@ -81,6 +88,21 @@ public class DraggableListFragment extends Fragment {
         mDraggableListController.setLockItemRange(mLockPositionStart, mLockPositionEnd);
         mDraggableListController.setLongPressToDrag(mIsCanDrag);
         return mBGAnimRecyclerView;
+    }
+
+    public void setBGResId(int resId) {
+        mBGResId = resId;
+        if (mBGAnimRecyclerView != null) {
+            mBGAnimRecyclerView.setBGResId(mBGResId);
+        }
+    }
+
+    public void setBGSize(int width, int height) {
+        mBGHeight = height;
+        mBGWidth = width;
+        if (mBGAnimRecyclerView != null) {
+            mBGAnimRecyclerView.setBGSize(width, height);
+        }
     }
 
     /**
@@ -178,7 +200,7 @@ public class DraggableListFragment extends Fragment {
      * @return
      */
     public static DraggableListFragment createMakeupListFragment(String groupCode, List<IDGSPItem> itemModelList,
-                                                                 DGSPItemAdapter adapter, DGSPFavoriteConfig favoriteConfig) {
+        DGSPItemAdapter adapter, DGSPFavoriteConfig favoriteConfig) {
         DraggableListFragment fragment = new DraggableListFragment();
         fragment.setItemModelList(itemModelList);
         fragment.setGroupCode(groupCode);

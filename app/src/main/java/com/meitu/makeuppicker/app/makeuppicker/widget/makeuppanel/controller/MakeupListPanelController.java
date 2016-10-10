@@ -17,7 +17,7 @@ import com.yangsq.draggableselectpanel.helper.DGSPFavoriteHelper;
 import com.yangsq.draggableselectpanel.helper.DGSPItemHelper;
 import com.yangsq.draggableselectpanel.view.DraggableGroupSelectPanelView;
 import com.yangsq.draggableselectpanel.adapter.DraggableSelectViewHolder;
-import com.yangsq.draggableselectpanel.adapter.DGSPViewAdapter;
+import com.yangsq.draggableselectpanel.view.DGSPViewAdapter;
 import com.yangsq.draggableselectpanel.interfaces.OnDragToTitleBtnListener;
 import com.yangsq.draggableselectpanel.interfaces.OnItemViewClickListener;
 import com.yangsq.draggableselectpanel.model.IDGSPItem;

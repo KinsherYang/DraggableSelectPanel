@@ -7,6 +7,7 @@ import org.greenrobot.eventbus.EventBus;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -20,9 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yangsq.draggableselectpanel.R;
-import com.yangsq.draggableselectpanel.adapter.DraggableSelectViewHolder;
 import com.yangsq.draggableselectpanel.adapter.DGSPItemAdapter;
-import com.yangsq.draggableselectpanel.adapter.DGSPViewAdapter;
+import com.yangsq.draggableselectpanel.adapter.DraggableSelectViewHolder;
 import com.yangsq.draggableselectpanel.event.DGSPFavoriteEvent;
 import com.yangsq.draggableselectpanel.event.DGSPFavoriteGroupChangeEvent;
 import com.yangsq.draggableselectpanel.event.DGSPSelectItemEvent;
@@ -61,10 +61,7 @@ public class DraggableGroupSelectPanelView extends LinearLayout {
      */
     private DraggableListFragment currentFragment;
     private FragmentManager mFragmentManager;
-    /**
-     * 当前所选中的item里的CheckedTextView
-     */
-    private DraggableSelectViewHolder currentSelectViewHolder;
+
     /**
      * 列表里的item点击监听
      */
@@ -85,7 +82,18 @@ public class DraggableGroupSelectPanelView extends LinearLayout {
      * 收藏功能的配置
      */
     private DGSPFavoriteConfig mDGSPFavoriteConfig = new DGSPFavoriteConfig();
-
+    /**
+     * 背景图片资源文件id
+     */
+    private int mBgResId;
+    /**
+     * 背景图片高
+     */
+    private int mBGHeight;
+    /**
+     * 背景图片宽
+     */
+    private int mBGWidth;
     /**
      * 适配器
      */
@@ -111,7 +119,17 @@ public class DraggableGroupSelectPanelView extends LinearLayout {
 
     public DraggableGroupSelectPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initAttr(attrs);
         initViews();
+    }
+
+    private void initAttr(AttributeSet attrs) {
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.DraggableGroupSelectPanelView);
+        mBGHeight = a.getDimensionPixelSize(R.styleable.DraggableGroupSelectPanelView_dgsp_bg_height,
+            getResources().getDimensionPixelOffset(R.dimen.dsgp_bg_size));
+        mBGWidth = a.getDimensionPixelSize(R.styleable.DraggableGroupSelectPanelView_dgsp_bg_width,
+            getResources().getDimensionPixelOffset(R.dimen.dsgp_bg_size));
+        mBgResId = a.getResourceId(R.styleable.DraggableGroupSelectPanelView_dgsp_bg_image_resource, 0);
     }
 
     private void initViews() {
@@ -136,8 +154,8 @@ public class DraggableGroupSelectPanelView extends LinearLayout {
      * @param position          拖拽列表标题所在位置,小于0默认添加到队列最后
      */
     public void generateItemListFragment(String groupCode, int iconResId, String groupName,
-                                         List<IDGSPItem> itemModelList, boolean isCanDrag, int lockStartPosition, int lockEndPosition,
-                                         DGSPItemAdapter itemAdapter, int position) {
+        List<IDGSPItem> itemModelList, boolean isCanDrag, int lockStartPosition, int lockEndPosition,
+        DGSPItemAdapter itemAdapter, int position) {
         if (mLLItemGroup != null) {
             if (mFragmentManager == null) {
                 throw new IllegalArgumentException("mFragmentManager is null");
@@ -150,6 +168,10 @@ public class DraggableGroupSelectPanelView extends LinearLayout {
                 fragment.setOnDragItemListener(mOnAllDragItem);
                 fragment.setIsCanDrag(isCanDrag);
                 fragment.setLockItemRange(lockStartPosition, lockEndPosition);
+                fragment.setBGSize(mBGWidth, mBGHeight);
+                if (mBgResId > 0) {
+                    fragment.setBGResId(mBgResId);
+                }
                 FragmentTransaction transaction = mFragmentManager.beginTransaction();
                 transaction.add(R.id.fl_makeup_list, fragment);
                 transaction.hide(fragment);
@@ -161,11 +183,6 @@ public class DraggableGroupSelectPanelView extends LinearLayout {
                 mLLItemGroup.addView(getTabView(iconResId, groupCode, groupName, fragment));
             }
         }
-    }
-
-    public void clearDataView() {
-        mLLItemGroup.removeAllViews();
-        // TODO: 2016/10/9 移除fragmenManager里的所有fragment
     }
 
     /**
@@ -195,6 +212,9 @@ public class DraggableGroupSelectPanelView extends LinearLayout {
         return tabView;
     }
 
+    /**
+     * 记录上一次选中的tab，用来改变选中状态
+     */
     private View mCurrentSelectTab;
 
     /**
@@ -254,6 +274,11 @@ public class DraggableGroupSelectPanelView extends LinearLayout {
      * 选中列表项
      */
     private OnItemViewClickListener mItemClickListener = new OnItemViewClickListener() {
+        /**
+         * 当前所选中的item里的CheckedTextView
+         */
+        private DraggableSelectViewHolder currentSelectViewHolder;
+
         @Override
         public void onClick(String groupCode, IDGSPItem itemModel, DraggableSelectViewHolder viewHolder,
             RecyclerView.Adapter adapter) {
@@ -329,7 +354,8 @@ public class DraggableGroupSelectPanelView extends LinearLayout {
             if (mIsItemOnTitleBtn && mOnTitleBtnTrigger != null) {
                 // 触发标题按钮事件
                 if (recyclerView.getAdapter() instanceof DGSPItemAdapter) {
-                    IDGSPItem item = ((DGSPItemAdapter) recyclerView.getAdapter()).getItem(viewHolder.getAdapterPosition());
+                    IDGSPItem item =
+                        ((DGSPItemAdapter) recyclerView.getAdapter()).getItem(viewHolder.getAdapterPosition());
                     mOnTitleBtnTrigger.OnDragToTitleBtn(recyclerView, item, viewHolder);
                 }
             }
@@ -499,6 +525,10 @@ public class DraggableGroupSelectPanelView extends LinearLayout {
         mOnGroupSelectListener = onGroupSelectListener;
     }
 
+    /**
+     * 收藏功能的配置文件
+     * @return
+     */
     public DGSPFavoriteConfig getFavoriteConfig() {
         return mDGSPFavoriteConfig;
     }
@@ -521,4 +551,5 @@ public class DraggableGroupSelectPanelView extends LinearLayout {
     public FavoriteManager getFavoriteManager() {
         return mFavoriteManager;
     }
+
 }

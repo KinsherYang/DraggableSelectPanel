@@ -48,6 +48,7 @@ public class BGAnimRecyclerView extends RecyclerView {
     private boolean isInited;
     private boolean mIsDrawBitmap = true;
     private ValueAnimator mAnimator;
+    private int mBGResId;
     /**
      * 是否正在动画中，是的话则不能立即设置背景位置
      */
@@ -106,6 +107,7 @@ public class BGAnimRecyclerView extends RecyclerView {
             }
         });
         mBGView = new ImageView(getContext());
+        mBGResId = DEFAULT_BG_RESOURCE;
     }
 
     /**
@@ -153,7 +155,7 @@ public class BGAnimRecyclerView extends RecyclerView {
         int firstVisiblePosition = getChildViewHolder(firstChild).getAdapterPosition();
         index = index - firstVisiblePosition;
         View childView = getChildAt(index);
-        ViewHolder indexViewHolder = null;//当前index对应的viewHolder
+        ViewHolder indexViewHolder = null;// 当前index对应的viewHolder
         if (childView != null) {
             // 找到背景图片的中心
             float middleX, middleY;
@@ -233,7 +235,7 @@ public class BGAnimRecyclerView extends RecyclerView {
                             float onceDx = (Integer) animation.getAnimatedValue() / (float) ANIMATOR_FRAME * dx;
                             float onceDy = (Integer) animation.getAnimatedValue() / (float) ANIMATOR_FRAME * dy;
                             mBGLocation.set(mBGLocation.left + onceDx, mBGLocation.top + onceDy,
-                                    mBGLocation.right + onceDx, mBGLocation.bottom + onceDy);
+                                mBGLocation.right + onceDx, mBGLocation.bottom + onceDy);
                             invalidate();
                         }
                     });
@@ -263,7 +265,7 @@ public class BGAnimRecyclerView extends RecyclerView {
                     mBGHeight = childView.getHeight();
                     mBGWidth = childView.getWidth();
                 }
-                Drawable drawableIc = ContextCompat.getDrawable(getContext(), DEFAULT_BG_RESOURCE);
+                Drawable drawableIc = ContextCompat.getDrawable(getContext(), mBGResId);
                 int size = (int) Math.min(mBGHeight, mBGWidth);
                 mBGHeight = size;
                 mBGWidth = size;
@@ -309,6 +311,18 @@ public class BGAnimRecyclerView extends RecyclerView {
     public void setBGSize(float width, float height) {
         mBGWidth = width;
         mBGHeight = height;
+    }
+
+    public void setBGResId(int resId) {
+        mBGResId = resId;
+        if (mBGBitmap != null) {
+            Drawable drawableIc = ContextCompat.getDrawable(getContext(), mBGResId);
+            int size = (int) Math.min(mBGHeight, mBGWidth);
+            mBGHeight = size;
+            mBGWidth = size;
+            mBGBitmap = BitmapUtils.drawableToBitmap(drawableIc, size, size);
+            mBGView.setImageBitmap(mBGBitmap);
+        }
     }
 
     /**
@@ -380,13 +394,15 @@ public class BGAnimRecyclerView extends RecyclerView {
      */
     public void moveItemRefreshPosition(int oldPosition, int newPosition) {
         if (mCurrentSelectedIndex >= 0) {
-            if ((oldPosition < mCurrentSelectedIndex && newPosition < mCurrentSelectedIndex) ||
-                    (oldPosition > mCurrentSelectedIndex && newPosition > mCurrentSelectedIndex)) {
+            if ((oldPosition < mCurrentSelectedIndex && newPosition < mCurrentSelectedIndex)
+                || (oldPosition > mCurrentSelectedIndex && newPosition > mCurrentSelectedIndex)) {
                 return;
             }
-            if (newPosition > mCurrentSelectedIndex || (newPosition == mCurrentSelectedIndex && oldPosition < mCurrentSelectedIndex)) {
+            if (newPosition > mCurrentSelectedIndex
+                || (newPosition == mCurrentSelectedIndex && oldPosition < mCurrentSelectedIndex)) {
                 mCurrentSelectedIndex--;
-            } else if (newPosition < mCurrentSelectedIndex || (newPosition == mCurrentSelectedIndex && oldPosition > mCurrentSelectedIndex)) {
+            } else if (newPosition < mCurrentSelectedIndex
+                || (newPosition == mCurrentSelectedIndex && oldPosition > mCurrentSelectedIndex)) {
                 mCurrentSelectedIndex++;
             }
         }
@@ -401,7 +417,7 @@ public class BGAnimRecyclerView extends RecyclerView {
     public void showBgViewIfNecessary(ViewHolder dragViewHolder) {
         if (dragViewHolder != mCurrentSelectedViewHolder && mIsDrawBitmap) {
             addBGViewToItem(mCurrentSelectedViewHolder);
-            //隐藏drawBitmap
+            // 隐藏drawBitmap
             mIsDrawBitmap = false;
         }
     }
@@ -413,7 +429,7 @@ public class BGAnimRecyclerView extends RecyclerView {
         setBGLocation(mCurrentSelectedIndex);
         if (!mIsDrawBitmap) {
             removeBGViewFromItem(mCurrentSelectedViewHolder);
-            //显示drawBitmap
+            // 显示drawBitmap
             if (mBGLocation == null) {
                 mBGLocation = new RectF();
             }

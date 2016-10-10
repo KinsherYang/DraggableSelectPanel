@@ -8,7 +8,7 @@ import com.yangsq.draggableselectpanel.model.IDGSPItem;
 import com.yangsq.draggableselectpanel.model.ItemGroupModel;
 
 /**
- * 妆容收藏的数据操作
+ * 妆容的数据操作
  * @author ysq 2016/9/28.
  */
 public class MakeupProvider {

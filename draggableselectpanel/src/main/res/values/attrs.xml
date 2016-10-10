@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DraggableGroupSelectPanelView">
+        <attr name="dgsp_bg_height" format="dimension|reference" />
+        <attr name="dgsp_bg_width" format="dimension|reference" />
+        <attr name="dgsp_bg_image_resource" format="reference" />
+    </declare-styleable>
+</resources>

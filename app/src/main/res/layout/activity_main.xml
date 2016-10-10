@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
+
+
+    <SurfaceView
+        android:id="@+id/sv_camera"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="30dp" />
+
+    <com.yangsq.draggableselectpanel.view.DraggableGroupSelectPanelView
+        android:id="@+id/dgsp_makeup_panel"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:layout_above="@+id/iv_toggle_show"
+        android:clipChildren="false" />
+
+    <ImageView
+        android:id="@+id/iv_toggle_show"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:background="#F7F7F7"
+        android:scaleType="centerInside"
+        android:src="@drawable/makeup_panel_toggle_down" />
+
+    <ImageView
+        android:id="@+id/iv_take_pic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="175dp"
+        android:src="@drawable/makeup_take_pic_ic" />
+</RelativeLayout>

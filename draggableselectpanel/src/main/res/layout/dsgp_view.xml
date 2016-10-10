@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dsgp_tab_title_height">
+
+        <HorizontalScrollView
+            android:id="@+id/hsv_item_group"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#F7F7F7"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/ll_item_group"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:orientation="horizontal">
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <RelativeLayout
+            android:id="@+id/rl_title_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/dgsp_title_text_normal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_title_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:drawablePadding="7dp"
+                android:textColor="@color/white"
+                android:textSize="13dp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+    <FrameLayout
+        android:id="@+id/fl_makeup_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dsgp_select_item_height"
+        android:background="@color/white"
+        android:clipChildren="false" />
+
+</LinearLayout>

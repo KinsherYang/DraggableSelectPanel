@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#232323</color>
+    <color name="gray">#808080</color>
+
+    <color name="dgsp_title_text_normal">#6C6C6C</color>
+    <color name="dgsp_title_text_checked">@color/black</color>
+    <drawable name="dgsp_title_bg_normal">#F7F7F7</drawable>
+    <drawable name="dgsp_title_bg_checked">@color/white</drawable>
+    <color name="dsgp_title_btn_bg_normal">#ff4b51</color>
+    <color name="dsgp_title_btn_bg_focus">#e54349</color>
+</resources>
